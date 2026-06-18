@@ -150,12 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const email = document.getElementById('forgot-email').value.trim();
 
-        let options = {};
-        // O Supabase bloqueia URLs file:// no redirectTo. 
-        // Se estiver num servidor local (http), enviamos para a tela de reset.
-        if (window.location.protocol !== 'file:') {
-            options.redirectTo = new URL('reset-password.html', window.location.href).href;
-        }
+        const options = {
+            redirectTo: 'https://agendasala.netlify.app/reset-password.html'
+        };
 
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, options);
 
