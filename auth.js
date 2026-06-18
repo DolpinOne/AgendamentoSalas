@@ -28,14 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicialização da Sessão
     async function initSession() {
+        const hash = window.location.hash || window.location.search;
+        // Se houver um token de recuperação, repassa para a tela de reset
+        if (hash.includes('type=recovery') || hash.includes('recovery')) {
+            window.location.href = 'reset-password.html' + hash;
+            return;
+        }
+
         const { data: { session }, error } = await supabase.auth.getSession();
 
         if (session && session.user) {
-            // Se houver uma requisição de recuperação na URL, não redireciona ainda
-            const hash = window.location.hash || window.location.search;
-            if (!hash.includes('type=recovery') && !hash.includes('recovery')) {
-                window.location.href = 'dashboard.html';
-            }
+            window.location.href = 'dashboard.html';
         } else {
             showScreen(loginSection);
         }
@@ -147,11 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const email = document.getElementById('forgot-email').value.trim();
 
-        const redirectUrl = new URL('reset-password.html', window.location.href).href;
+        let options = {};
+        // O Supabase bloqueia URLs file:// no redirectTo. 
+        // Se estiver num servidor local (http), enviamos para a tela de reset.
+        if (window.location.protocol !== 'file:') {
+            options.redirectTo = new URL('reset-password.html', window.location.href).href;
+        }
 
-        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: redirectUrl,
-        });
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, options);
 
         if (error) {
             forgotError.textContent = 'Erro ao enviar e-mail: ' + error.message;
