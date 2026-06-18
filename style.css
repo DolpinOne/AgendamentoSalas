@@ -72,7 +72,7 @@ body {
 }
 
 /* Login e Registro */
-#login-section, #register-section {
+#login-section, #register-section, #forgot-password-section, #update-password-section {
     align-items: center;
     justify-content: center;
     min-height: 80vh;
