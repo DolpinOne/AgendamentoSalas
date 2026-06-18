@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginSection = document.getElementById('login-section');
     const registerSection = document.getElementById('register-section');
     const forgotPasswordSection = document.getElementById('forgot-password-section');
-    const updatePasswordSection = document.getElementById('update-password-section');
 
     // Elementos Login
     const loginForm = document.getElementById('login-form');
@@ -16,11 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToLoginFromForgotBtn = document.getElementById('back-to-login-from-forgot-btn');
     const forgotError = document.getElementById('forgot-error');
     const forgotSuccess = document.getElementById('forgot-success');
-
-    // Elementos Atualizar Senha (via link)
-    const updatePasswordForm = document.getElementById('update-password-form');
-    const updateError = document.getElementById('update-error');
-    const updateSuccess = document.getElementById('update-success');
 
     // Elementos Registro
     const registerForm = document.getElementById('register-form');
@@ -48,12 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Monitorar mudanças no estado de autenticação (Sign In / Sign Out)
         supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'PASSWORD_RECOVERY') {
-                showScreen(updatePasswordSection);
-            } else if (event === 'SIGNED_IN' && session) {
-                if (!updatePasswordSection.classList.contains('active')) {
-                    window.location.href = 'dashboard.html';
-                }
+            if (event === 'SIGNED_IN' && session) {
+                window.location.href = 'dashboard.html';
             } else if (event === 'SIGNED_OUT') {
                 showScreen(loginSection);
             }
@@ -157,8 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const email = document.getElementById('forgot-email').value.trim();
 
-        // Passando a URL atual para garantir que o redirecionamento caia no index.html correto
-        const redirectUrl = window.location.href.split('#')[0].split('?')[0];
+        const redirectUrl = new URL('reset-password.html', window.location.href).href;
 
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: redirectUrl,
@@ -171,27 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 showScreen(loginSection);
             }, 5000);
-        }
-    });
-
-    updatePasswordForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        updateError.textContent = '';
-        updateSuccess.textContent = '';
-
-        const newPassword = document.getElementById('update-password').value;
-
-        const { data, error } = await supabase.auth.updateUser({
-            password: newPassword
-        });
-
-        if (error) {
-            updateError.textContent = 'Erro ao atualizar senha: ' + error.message;
-        } else {
-            updateSuccess.textContent = 'Senha atualizada com sucesso! Redirecionando...';
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 2000);
         }
     });
 });
