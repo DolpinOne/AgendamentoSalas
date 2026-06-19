@@ -157,7 +157,6 @@ body.auth-bg {
 
 /* Quando input for do tipo time e tiver o seletor em alguns browsers */
 input[type="time"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
     cursor: pointer;
 }
 
