@@ -513,8 +513,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     /* Modais */
     .modal-content {
         padding: 25px 20px;
-        width: 95%;
-        margin: 10px;
+        width: calc(100% - 30px);
+        margin: 15px auto;
     }
 
     /* Ajustar inputs que estão lado a lado no HTML (Start e End time) */
