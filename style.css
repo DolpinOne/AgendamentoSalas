@@ -34,6 +34,8 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
+    background-image: radial-gradient(circle at 15% 50%, rgba(242, 101, 34, 0.08), transparent 25%),
+                      radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.03), transparent 25%);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
@@ -50,6 +52,24 @@ body.auth-bg {
     width: 100%;
     max-width: 1400px;
     padding: 20px;
+    position: relative;
+}
+
+/* Auth Logo */
+.auth-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 160px;
+    height: auto;
+    z-index: 10;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+    animation: fadeInDown 0.6s ease-out;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Telas */
@@ -183,9 +203,17 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     align-items: center;
     margin-bottom: 40px;
     padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, var(--primary-color), rgba(0, 51, 102, 0.1)) 1;
 }
-.app-header h1 { font-size: 1.8rem; font-weight: 700; }
+.app-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ffffff, var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
 .user-info { display: flex; align-items: center; gap: 15px; }
 .user-info span { font-weight: 600; color: var(--primary-color); }
 
@@ -203,19 +231,36 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     padding: 30px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     color: var(--text-card);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.room-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), #003366);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 51, 102, 0.2), 0 0 20px rgba(242, 101, 34, 0.15);
+    border-color: var(--primary-color);
+}
+
+.room-card:hover::before {
+    opacity: 1;
 }
 
 /* Estilos Específicos por Sala no Dashboard */
 .room-green .room-icon { color: var(--room-green); background: rgba(16, 185, 129, 0.1); }
-.room-green:hover { border-color: var(--room-green); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15); transform: translateY(-5px); }
-
 .room-red .room-icon { color: var(--room-red); background: rgba(239, 68, 68, 0.1); }
-.room-red:hover { border-color: var(--room-red); box-shadow: 0 10px 25px rgba(239, 68, 68, 0.15); transform: translateY(-5px); }
-
 .room-yellow .room-icon { color: var(--room-yellow); background: rgba(234, 179, 8, 0.1); }
-.room-yellow:hover { border-color: var(--room-yellow); box-shadow: 0 10px 25px rgba(234, 179, 8, 0.15); transform: translateY(-5px); }
 
 .room-icon {
     width: 60px;
