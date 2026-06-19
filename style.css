@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #6366f1; /* Padrão (Índigo) */
-    --primary-hover: #4f46e5;
+    --primary-color: #f26522; /* Laranja Eucatex */
+    --primary-hover: #d9561b;
     
     /* Cores das Salas */
     --room-green: #10b981;
@@ -16,10 +16,11 @@
     --dynamic-primary: var(--primary-color);
     --dynamic-hover: var(--primary-hover);
 
-    --bg-dark: #0f172a;
-    --bg-card: rgba(30, 41, 59, 0.7);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --bg-dark: #003366; /* Azul Escuro */
+    --bg-card: rgba(255, 255, 255, 0.95); /* Cartão branco translúcido */
+    --text-main: #ffffff; /* Texto branco principal */
+    --text-card: #003366; /* Texto azul escuro nos cards */
+    --text-muted: #4a5568;
     --error-color: #ef4444;
     --success-color: #10b981;
 }
@@ -33,12 +34,16 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
-    background-image: radial-gradient(circle at top right, #1e1b4b, #0f172a);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+body.auth-bg {
+    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.8)), url('login-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 #app {
@@ -65,10 +70,11 @@ body {
     background: var(--bg-card);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 51, 102, 0.1);
     border-radius: 16px;
     padding: 40px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: var(--text-card); /* Texto escuro no card claro */
 }
 
 /* Login e Registro */
@@ -112,9 +118,9 @@ body {
     width: 100%;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(15, 23, 42, 0.6);
-    color: var(--text-main);
+    border: 1px solid rgba(0, 51, 102, 0.2);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-card);
     font-size: 1rem;
     transition: all 0.3s ease;
 }
@@ -192,12 +198,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .room-card {
     background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 51, 102, 0.1);
     border-radius: 16px;
     padding: 30px;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: var(--text-card);
 }
 
 /* Estilos Específicos por Sala no Dashboard */
@@ -240,9 +247,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .btn-icon {
-    background: rgba(255,255,255,0.1);
+    background: rgba(0, 51, 102, 0.05);
     border: none;
-    color: var(--text-main);
+    color: var(--text-card);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -270,8 +277,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .calendar-day {
     min-height: 120px; /* Altura mínima muito maior para caber agendamentos */
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 51, 102, 0.02);
+    border: 1px solid rgba(0, 51, 102, 0.1);
     border-radius: 8px;
     padding: 10px;
     display: flex;
@@ -282,6 +289,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     transition: all 0.2s ease;
     font-size: 0.9rem;
     overflow-y: auto; /* Scroll interno se tiver muitas reuniões */
+    color: var(--text-card);
 }
 
 /* Scrollbar invisível no dia do calendário para ficar limpo */
@@ -295,14 +303,14 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .calendar-day:not(.empty):not(.disabled):hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 51, 102, 0.05);
     border-color: var(--dynamic-primary);
 }
 
 .calendar-day.disabled {
-    opacity: 0.3;
+    opacity: 0.5;
     cursor: not-allowed;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .calendar-day.today {
@@ -378,7 +386,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     transition: color 0.3s;
 }
-.close-btn:hover { color: var(--text-main); }
+.close-btn:hover { color: var(--primary-color); }
 
 /* Utils */
 .mt-4 { margin-top: 1rem; }
