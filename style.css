@@ -208,6 +208,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     padding-bottom: 20px;
     border-bottom: 2px solid transparent;
     border-image: linear-gradient(to right, var(--primary-color), rgba(0, 51, 102, 0.1)) 1;
+    position: relative;
+}
+
+.dashboard-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 50px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 .app-header h1 {
     font-size: 1.8rem;
