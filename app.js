@@ -304,6 +304,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            const app = selectedAppointmentForEdit;
+            if (app) {
+                const [y, m, d] = app.date.split('-');
+                const formattedDate = `${d}/${m}/${y}`;
+                try {
+                    await emailjs.send(
+                        "service_a6r0s3n",
+                        "template_bjrjffr",
+                        {   
+                            email: currentUser,
+                            sala: app.room,
+                            data: formattedDate,
+                            horario: app.start_time ? app.start_time.substring(0, 5) : "",
+                            hora_fim: app.end_time ? app.end_time.substring(0, 5) : ""
+                        },
+                        "NCtexqIz8pgtviGs_"
+                    );
+                    alert("Agendamento excluído e e-mail de cancelamento enviado!");
+                } catch (emailError) {
+                    console.error('Falha ao enviar e-mail de exclusão...', emailError);
+                    alert("Agendamento excluído, mas houve uma falha ao disparar o e-mail.");
+                }
+            }
+
             detailsModal.classList.add('hidden');
             renderCalendar();
         }
@@ -349,6 +373,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error) {
                 alert('Erro ao excluir agendamento: ' + error.message);
                 return;
+            }
+
+            const app = selectedAppointmentForEdit;
+            if (app) {
+                const [y, m, d] = app.date.split('-');
+                const formattedDate = `${d}/${m}/${y}`;
+                try {
+                    await emailjs.send(
+                        "service_a6r0s3n",
+                        "template_bjrjffr",
+                        {   
+                            email: currentUser,
+                            sala: app.room,
+                            data: formattedDate,
+                            horario: app.start_time ? app.start_time.substring(0, 5) : "",
+                            hora_fim: app.end_time ? app.end_time.substring(0, 5) : ""
+                        },
+                        "NCtexqIz8pgtviGs_"
+                    );
+                    alert("Agendamento excluído e e-mail de cancelamento enviado!");
+                } catch (emailError) {
+                    console.error('Falha ao enviar e-mail de exclusão...', emailError);
+                    alert("Agendamento excluído, mas houve uma falha ao disparar o e-mail.");
+                }
             }
 
             bookingModal.classList.add('hidden');
