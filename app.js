@@ -28,6 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const bookingDeleteBtn = document.getElementById('booking-delete-btn');
     const selectedDateDisplay = document.getElementById('selected-date-display');
 
+    // Preencher Selects de Horário
+    function populateTimeOptions() {
+        let optionsHTML = '<option value="" disabled selected>Selecione</option>';
+        for (let h = 0; h < 24; h++) {
+            for (let m = 0; m < 60; m += 15) {
+                const hh = String(h).padStart(2, '0');
+                const mm = String(m).padStart(2, '0');
+                const time = `${hh}:${mm}`;
+                optionsHTML += `<option value="${time}">${time}</option>`;
+            }
+        }
+        bookingTimeStartInput.innerHTML = optionsHTML;
+        bookingTimeEndInput.innerHTML = optionsHTML;
+    }
+    populateTimeOptions();
+
     // Elementos Modal Detalhes (Details)
     const detailsModal = document.getElementById('details-modal');
     const closeDetailsModalBtn = document.getElementById('close-details-modal');
@@ -313,13 +329,9 @@ document.addEventListener('DOMContentLoaded', () => {
     bookingTimeStartInput.addEventListener('change', (e) => {
         if (e.target.value) {
             const [hourStr, minStr] = e.target.value.split(':');
-            let date = new Date();
-            date.setHours(parseInt(hourStr, 10));
-            date.setMinutes(parseInt(minStr, 10) + 15);
-
-            const newHour = String(date.getHours()).padStart(2, '0');
-            const newMin = String(date.getMinutes()).padStart(2, '0');
-            bookingTimeEndInput.value = `${newHour}:${newMin}`;
+            let hour = parseInt(hourStr, 10);
+            hour = (hour + 1) % 24;
+            bookingTimeEndInput.value = `${String(hour).padStart(2, '0')}:${minStr}`;
         }
     });
 
@@ -430,7 +442,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         {
                             email: currentUser,
                             sala: currentRoom,
-                            destinatario: currentUser,
                             data: formattedDate,
                             horario: startTime
                         },
