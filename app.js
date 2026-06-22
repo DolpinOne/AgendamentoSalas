@@ -443,7 +443,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             email: currentUser,
                             sala: currentRoom,
                             data: formattedDate,
-                            horario: startTime
+                            horario: startTime,
+                            hora_fim: endTime
                         },
                         "NCtexqIz8pgtviGs_"
                     );
