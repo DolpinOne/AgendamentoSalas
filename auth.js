@@ -110,6 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const name = document.getElementById('reg-name').value.trim();
         const email = document.getElementById('reg-email').value.trim();
+
+        if (!email.toLowerCase().endsWith('@eucatex.com.br')) {
+            registerError.textContent = 'Apenas e-mails com domínio @eucatex.com.br são permitidos no cadastro.';
+            return;
+        }
+
         const pass = document.getElementById('reg-password').value;
 
         const { data, error } = await supabase.auth.signUp({
@@ -159,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (error) {
             forgotError.textContent = 'Erro ao enviar e-mail: ' + error.message;
         } else {
-            forgotSuccess.textContent = 'Instruções enviadas! Verifique sua caixa de entrada e spam.';
+            forgotSuccess.textContent = 'Instruções enviadas! Verifique sua caixa de entrada e lixo eletrônico.';
             setTimeout(() => {
                 showScreen(loginSection);
             }, 5000);

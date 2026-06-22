@@ -313,9 +313,13 @@ document.addEventListener('DOMContentLoaded', () => {
     bookingTimeStartInput.addEventListener('change', (e) => {
         if (e.target.value) {
             const [hourStr, minStr] = e.target.value.split(':');
-            let hour = parseInt(hourStr, 10);
-            hour = (hour + 1) % 24;
-            bookingTimeEndInput.value = `${String(hour).padStart(2, '0')}:${minStr}`;
+            let date = new Date();
+            date.setHours(parseInt(hourStr, 10));
+            date.setMinutes(parseInt(minStr, 10) + 15);
+            
+            const newHour = String(date.getHours()).padStart(2, '0');
+            const newMin = String(date.getMinutes()).padStart(2, '0');
+            bookingTimeEndInput.value = `${newHour}:${newMin}`;
         }
     });
 
@@ -414,10 +418,37 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error) {
                 bookingError.textContent = 'Erro ao criar agendamento: ' + error.message;
                 return;
+            } else {
+                sendEmailToOrganizer(title, currentRoom, selectedBookingDate, startTime, endTime);
             }
         }
 
         bookingModal.classList.add('hidden');
         renderCalendar();
     });
+
+    function sendEmailToOrganizer(title, room, date, startTime, endTime) {
+        if (typeof emailjs === 'undefined') return;
+        
+        const [y, m, d] = date.split('-');
+        const formattedDate = `${d}/${m}/${y}`;
+
+        const templateParams = {
+            to_email: currentUser,
+            to_name: currentUserName,
+            room_name: room,
+            meeting_title: title,
+            meeting_date: formattedDate,
+            start_time: startTime,
+            end_time: endTime
+        };
+
+        // O usuário configurou o Service ID e o TEMPLATE ID
+        emailjs.send('service_a6r0s3n', 'template_bjrjffr', templateParams)
+            .then(function(response) {
+                console.log('E-mail enviado com sucesso!', response.status, response.text);
+            }, function(error) {
+                console.log('Falha ao enviar e-mail...', error);
+            });
+    }
 });

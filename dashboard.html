@@ -104,11 +104,11 @@
                     <div class="input-group" style="display: flex; gap: 10px;">
                         <div style="flex: 1;">
                             <label for="booking-time-start">Início (hh:mm)</label>
-                            <input type="time" id="booking-time-start" step="1800" required>
+                            <input type="time" id="booking-time-start" step="900" required>
                         </div>
                         <div style="flex: 1;">
                             <label for="booking-time-end">Fim (hh:mm)</label>
-                            <input type="time" id="booking-time-end" step="1800" required>
+                            <input type="time" id="booking-time-end" step="900" required>
                         </div>
                     </div>
 
@@ -159,6 +159,13 @@
 
     <!-- Supabase JS Client SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      (function() {
+          emailjs.init("NCtexqIz8pgtviGs_");
+      })();
+    </script>
     <script src="app.js"></script>
 </body>
 
