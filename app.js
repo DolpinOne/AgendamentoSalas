@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     await emailjs.send(
                         "service_a6r0s3n",
-                        "template_bjrjffr",
+                        "template_t7d1jyj",
                         {   
                             email: currentUser,
                             sala: app.room,
