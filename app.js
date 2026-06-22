@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let date = new Date();
             date.setHours(parseInt(hourStr, 10));
             date.setMinutes(parseInt(minStr, 10) + 15);
-            
+
             const newHour = String(date.getHours()).padStart(2, '0');
             const newMin = String(date.getMinutes()).padStart(2, '0');
             bookingTimeEndInput.value = `${newHour}:${newMin}`;
@@ -419,36 +419,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 bookingError.textContent = 'Erro ao criar agendamento: ' + error.message;
                 return;
             } else {
-                sendEmailToOrganizer(title, currentRoom, selectedBookingDate, startTime, endTime);
+                // Envia e-mail
+                const [y, m, d] = selectedBookingDate.split('-');
+                const formattedDate = `${d}/${m}/${y}`;
+
+                try {
+                    await emailjs.send(
+                        "service_a6r0s3n",
+                        "template_bjrjffr",
+                        {
+                            email: currentUser,
+                            sala: currentRoom,
+                            destinatario: currentUser,
+                            data: formattedDate,
+                            horario: startTime
+                        },
+                        "NCtexqIz8pgtviGs_"
+                    );
+                    alert("Agendamento criado e e-mail enviado!");
+                } catch (emailError) {
+                    console.error('Falha ao enviar e-mail...', emailError);
+                    alert("Agendamento criado, mas houve uma falha ao disparar o e-mail.");
+                }
             }
         }
 
         bookingModal.classList.add('hidden');
         renderCalendar();
     });
-
-    function sendEmailToOrganizer(title, room, date, startTime, endTime) {
-        if (typeof emailjs === 'undefined') return;
-        
-        const [y, m, d] = date.split('-');
-        const formattedDate = `${d}/${m}/${y}`;
-
-        const templateParams = {
-            to_email: currentUser,
-            to_name: currentUserName,
-            room_name: room,
-            meeting_title: title,
-            meeting_date: formattedDate,
-            start_time: startTime,
-            end_time: endTime
-        };
-
-        // O usuário configurou o Service ID e o TEMPLATE ID
-        emailjs.send('service_a6r0s3n', 'template_bjrjffr', templateParams)
-            .then(function(response) {
-                console.log('E-mail enviado com sucesso!', response.status, response.text);
-            }, function(error) {
-                console.log('Falha ao enviar e-mail...', error);
-            });
-    }
 });
