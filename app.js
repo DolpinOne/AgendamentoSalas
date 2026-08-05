@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedAppointmentForEdit = app;
 
         detailTitle.textContent = app.title;
-        detailUser.textContent = `${getUserName(app.user_email)} (${app.user_email})`;
+        detailUser.textContent = app.user_email;
         const startTime = app.start_time ? app.start_time.substring(0, 5) : "00:00";
         const endTime = app.end_time ? app.end_time.substring(0, 5) : "00:00";
         detailDatetime.textContent = `${day} de ${monthName} de ${year} das ${startTime} às ${endTime}`;
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     await emailjs.send(
                         "service_a6r0s3n",
                         "template_t7d1jyj",
-                        {   
+                        {
                             email: currentUser,
                             sala: app.room,
                             data: formattedDate,
@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     await emailjs.send(
                         "service_a6r0s3n",
                         "template_bjrjffr",
-                        {   
+                        {
                             email: currentUser,
                             sala: app.room,
                             data: formattedDate,
