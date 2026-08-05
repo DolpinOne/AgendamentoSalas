@@ -12,6 +12,9 @@
     --room-yellow: #eab308;
     --room-yellow-hover: #ca8a04;
 
+    --room-blue: #3b82f6;
+    --room-blue-hover: #2563eb;
+
     /* Variáveis Dinâmicas de Tema (Modificadas via JS) */
     --dynamic-primary: var(--primary-color);
     --dynamic-hover: var(--primary-hover);
@@ -222,6 +225,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     font-size: 1.8rem;
     font-weight: 700;
     background: linear-gradient(90deg, #ffffff, var(--primary-color));
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -273,6 +277,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .room-green .room-icon { color: var(--room-green); background: rgba(16, 185, 129, 0.1); }
 .room-red .room-icon { color: var(--room-red); background: rgba(239, 68, 68, 0.1); }
 .room-yellow .room-icon { color: var(--room-yellow); background: rgba(234, 179, 8, 0.1); }
+.room-blue .room-icon { color: var(--room-blue); background: rgba(59, 130, 246, 0.1); }
 
 .room-icon {
     width: 60px;

@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'green': { primary: 'var(--room-green)', hover: 'var(--room-green-hover)' },
         'red': { primary: 'var(--room-red)', hover: 'var(--room-red-hover)' },
         'yellow': { primary: 'var(--room-yellow)', hover: 'var(--room-yellow-hover)' },
+        'blue': { primary: 'var(--room-blue)', hover: 'var(--room-blue-hover)' },
         'default': { primary: 'var(--primary-color)', hover: 'var(--primary-hover)' }
     };
 
