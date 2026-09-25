@@ -1,6 +1,7 @@
 :root {
     --primary-color: #f26522; /* Laranja Eucatex */
     --primary-hover: #d9561b;
+    --primary-glow: rgba(242, 101, 34, 0.15);
     
     /* Cores das Salas */
     --room-green: #10b981;
@@ -50,8 +51,26 @@ body {
 }
 
 body.auth-bg {
-    background: linear-gradient(rgba(0, 51, 102, 0.6), rgba(0, 51, 102, 0.8)), url('login-bg.jpg') no-repeat center center fixed;
+    /* O 50% ajusta a posição horizontal da imagem. Se a divisão estiver torta, você pode mudar para 49% ou 51% para alinhar perfeitamente */
+    background: linear-gradient(rgba(0, 51, 102, 0.4), rgba(0, 51, 102, 0.7)), url('bg-split.jpg') no-repeat;
+    background-position: 50% center; 
     background-size: cover;
+    background-attachment: fixed;
+}
+
+body.madeira-theme {
+    --primary-color: #8bc34a; /* verde folha */
+    --primary-hover: #7cb342;
+    --primary-glow: rgba(139, 195, 74, 0.15);
+    --dynamic-primary: #8bc34a;
+    --dynamic-hover: #7cb342;
+    
+    background-color: #001f3f; /* Fundo base azul escuro */
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(139, 195, 74, 0.25) 0%, transparent 45%),   /* verde claro */
+        radial-gradient(circle at 100% 100%, rgba(0, 153, 204, 0.25) 0%, transparent 55%), /* azul claro */
+        radial-gradient(circle at 50% 50%, #003366 0%, #001a33 100%);
+    background-attachment: fixed;
 }
 
 #app {
@@ -61,24 +80,100 @@ body.auth-bg {
     position: relative;
 }
 
-/* Auth Logo */
-.auth-logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 160px;
-    height: auto;
-    z-index: 10;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
-    animation: fadeInDown 0.6s ease-out;
-}
-
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Telas */
+/* --- TELA DE SELEÇÃO DE UNIDADE (select.html) --- */
+.select-body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+.select-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.select-side {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease;
+}
+
+.select-tintas {
+    /* Pega apenas a metade esquerda da imagem */
+    background-image: url('bg-split.jpg');
+    background-size: 200% 100%;
+    background-position: 0% center;
+}
+
+.select-madeira {
+    /* Pega apenas a metade direita da imagem */
+    background-image: url('bg-split.jpg');
+    background-size: 200% 100%;
+    background-position: 100% center;
+}
+
+.select-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.5); /* Clarifica a imagem de fundo */
+    transition: background 0.3s ease;
+    z-index: 1;
+}
+
+.select-side:hover .select-overlay {
+    background: rgba(255, 255, 255, 0.1); /* Deixa a imagem nítida no hover */
+}
+
+.select-logo {
+    position: relative;
+    z-index: 2;
+    width: 280px;
+    height: auto;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    transition: transform 0.3s ease;
+}
+
+.select-side:hover .select-logo {
+    transform: scale(1.05); /* Logo cresce sutilmente */
+}
+
+.select-title {
+    position: relative;
+    z-index: 2;
+    margin-top: 30px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    background: rgba(255,255,255,0.9);
+    padding: 12px 25px;
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.select-side:hover .select-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Telas normais */
 .screen {
     display: none;
     opacity: 0;
@@ -125,6 +220,59 @@ body.auth-bg {
 .login-card p {
     color: var(--text-muted);
     margin-bottom: 30px;
+}
+
+/* Unit Selection */
+#unit-section {
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.unit-split {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.unit-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 30px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.unit-btn h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.unit-btn p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.unit-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.unit-divider {
+    width: 2px;
+    background: rgba(0, 51, 102, 0.1);
 }
 
 /* Inputs */
@@ -198,8 +346,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .btn-text:hover { color: var(--primary-hover); text-decoration: underline; }
 
-#logout-btn { color: var(--text-muted); }
-#logout-btn:hover { color: var(--error-color); text-decoration: none; }
+#logout-btn, #logout-btn-calendar { color: var(--text-muted); }
+#logout-btn:hover, #logout-btn-calendar:hover { color: var(--error-color); text-decoration: none; }
+
+.back-select-btn { color: var(--text-muted); }
+.back-select-btn:hover { color: var(--primary-hover); text-decoration: underline; }
 
 /* Dashboard */
 .app-header {
@@ -265,7 +416,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .room-card:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(0, 51, 102, 0.2), 0 0 20px rgba(242, 101, 34, 0.15);
+    box-shadow: 0 15px 35px rgba(0, 51, 102, 0.2), 0 0 20px var(--primary-glow);
     border-color: var(--primary-color);
 }
 

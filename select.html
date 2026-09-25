@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecione a Unidade - Eucatex</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="select-body">
+    <div class="select-container">
+        <!-- Lado Tintas -->
+        <div class="select-side select-tintas" id="btn-tintas">
+            <div class="select-overlay"></div>
+            <img src="logo-tintas.png" class="select-logo" alt="Eucatex Tintas">
+            <h2 class="select-title">Entrar em Eucatex Tintas</h2>
+        </div>
+
+        <!-- Lado Madeira -->
+        <div class="select-side select-madeira" id="btn-madeira">
+            <div class="select-overlay"></div>
+            <img src="eucatex-logo.png" class="select-logo" alt="Eucatex Madeira">
+            <h2 class="select-title">Entrar em Eucatex Madeira</h2>
+        </div>
+    </div>
+
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Verificação rápida de sessão
+        const supabaseUrl = localStorage.getItem('supabase.auth.token');
+        // A lógica pesada continua no app.js, aqui é só seleção rápida.
+
+        document.getElementById('btn-tintas').addEventListener('click', () => {
+            localStorage.setItem('selectedUnit', 'tintas');
+            window.location.href = 'dashboard.html';
+        });
+
+        document.getElementById('btn-madeira').addEventListener('click', () => {
+            localStorage.setItem('selectedUnit', 'madeira');
+            window.location.href = 'dashboard-madeira.html';
+        });
+    </script>
+</body>
+
+</html>

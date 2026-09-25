@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const { data: { session }, error } = await supabase.auth.getSession();
 
         if (session && session.user) {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'select.html';
         } else {
             showScreen(loginSection);
         }
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Monitorar mudanças no estado de autenticação (Sign In / Sign Out)
         supabase.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN' && session) {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'select.html';
             } else if (event === 'SIGNED_OUT') {
                 showScreen(loginSection);
             }
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loginError.textContent = 'E-mail ou senha incorretos: ' + error.message;
         } else {
             loginError.textContent = '';
-            window.location.href = 'dashboard.html';
+            window.location.href = 'select.html';
         }
     });
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.user) {
             registerForm.reset();
             if (data.session) {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'select.html';
             } else {
                 registerError.style.color = 'var(--success-color)';
                 registerError.textContent = 'Cadastro realizado! Verifique seu e-mail para confirmar a conta.';

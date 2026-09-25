@@ -409,10 +409,18 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         bookingError.textContent = '';
 
-        const editId = bookingEditId.value;
-        const startTime = bookingTimeStartInput.value;
-        const endTime = bookingTimeEndInput.value;
-        const title = bookingTitleInput.value;
+        const submitBtn = bookingForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn ? submitBtn.textContent : 'Confirmar Agendamento';
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Aguarde...';
+        }
+
+        try {
+            const editId = bookingEditId.value;
+            const startTime = bookingTimeStartInput.value;
+            const endTime = bookingTimeEndInput.value;
+            const title = bookingTitleInput.value;
 
         if (!startTime || !endTime) {
             bookingError.textContent = 'Por favor, selecione um horário válido de início e fim.';
@@ -505,7 +513,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        bookingModal.classList.add('hidden');
-        renderCalendar();
+            bookingModal.classList.add('hidden');
+            renderCalendar();
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            }
+        }
     });
 });
