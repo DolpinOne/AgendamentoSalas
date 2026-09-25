@@ -1,0 +1,174 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Seções
+    const loginSection = document.getElementById('login-section');
+    const registerSection = document.getElementById('register-section');
+    const forgotPasswordSection = document.getElementById('forgot-password-section');
+
+    // Elementos Login
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    const goToRegisterBtn = document.getElementById('go-to-register-btn');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+
+    // Elementos Recuperar Senha
+    const forgotPasswordForm = document.getElementById('forgot-password-form');
+    const backToLoginFromForgotBtn = document.getElementById('back-to-login-from-forgot-btn');
+    const forgotError = document.getElementById('forgot-error');
+    const forgotSuccess = document.getElementById('forgot-success');
+
+    // Elementos Registro
+    const registerForm = document.getElementById('register-form');
+    const registerError = document.getElementById('register-error');
+    const backToLoginBtn = document.getElementById('back-to-login-btn');
+
+    // --- CONFIGURAÇÃO DO SUPABASE ---
+    const SUPABASE_URL = 'https://gmdzduejtkbhonmhatar.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ZxDTz8UdVzyGbIjb_I-M4w_2VWn3rJb';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Inicialização da Sessão
+    async function initSession() {
+        const hash = window.location.hash || window.location.search;
+        // Se houver um token de recuperação, repassa para a tela de reset
+        if (hash.includes('type=recovery') || hash.includes('recovery')) {
+            window.location.href = 'reset-password.html' + hash;
+            return;
+        }
+
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        if (session && session.user) {
+            window.location.href = 'select.html';
+        } else {
+            showScreen(loginSection);
+        }
+
+        // Monitorar mudanças no estado de autenticação (Sign In / Sign Out)
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                window.location.href = 'select.html';
+            } else if (event === 'SIGNED_OUT') {
+                showScreen(loginSection);
+            }
+        });
+    }
+
+    initSession();
+
+    function showScreen(screenElement) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        screenElement.classList.add('active');
+    }
+
+    // --- NAVEGAÇÃO ---
+    goToRegisterBtn.addEventListener('click', () => {
+        showScreen(registerSection);
+        registerError.textContent = '';
+    });
+
+    backToLoginBtn.addEventListener('click', () => {
+        showScreen(loginSection);
+        loginError.textContent = '';
+    });
+
+    forgotPasswordLink.addEventListener('click', () => {
+        showScreen(forgotPasswordSection);
+        forgotError.textContent = '';
+        forgotSuccess.textContent = '';
+        document.getElementById('forgot-email').value = '';
+    });
+
+    backToLoginFromForgotBtn.addEventListener('click', () => {
+        showScreen(loginSection);
+    });
+
+    // --- AÇÕES ---
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.textContent = '';
+
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('password').value;
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: pass
+        });
+
+        if (error) {
+            loginError.textContent = 'E-mail ou senha incorretos: ' + error.message;
+        } else {
+            loginError.textContent = '';
+            window.location.href = 'select.html';
+        }
+    });
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        registerError.textContent = '';
+        registerError.style.color = 'var(--error-color)';
+
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+
+        if (!email.toLowerCase().endsWith('@eucatex.com.br')) {
+            registerError.textContent = 'Apenas e-mails com domínio @eucatex.com.br são permitidos no cadastro.';
+            return;
+        }
+
+        const pass = document.getElementById('reg-password').value;
+
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: pass,
+            options: {
+                data: {
+                    name: name
+                }
+            }
+        });
+
+        if (error) {
+            registerError.textContent = error.message;
+            return;
+        }
+
+        if (data.user) {
+            registerForm.reset();
+            if (data.session) {
+                window.location.href = 'select.html';
+            } else {
+                registerError.style.color = 'var(--success-color)';
+                registerError.textContent = 'Cadastro realizado! Verifique seu e-mail para confirmar a conta.';
+                setTimeout(() => {
+                    registerError.style.color = 'var(--error-color)';
+                    registerError.textContent = '';
+                    showScreen(loginSection);
+                }, 5000);
+            }
+        }
+    });
+
+    forgotPasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        forgotError.textContent = '';
+        forgotSuccess.textContent = '';
+
+        const email = document.getElementById('forgot-email').value.trim();
+
+        const options = {
+            redirectTo: 'https://agendasala.netlify.app/reset-password.html'
+        };
+
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, options);
+
+        if (error) {
+            forgotError.textContent = 'Erro ao enviar e-mail: ' + error.message;
+        } else {
+            forgotSuccess.textContent = 'Instruções enviadas! Verifique sua caixa de entrada e lixo eletrônico.';
+            setTimeout(() => {
+                showScreen(loginSection);
+            }, 5000);
+        }
+    });
+});

@@ -1,0 +1,699 @@
+:root {
+    --primary-color: #f26522; /* Laranja Eucatex */
+    --primary-hover: #d9561b;
+    --primary-glow: rgba(242, 101, 34, 0.15);
+    
+    /* Cores das Salas */
+    --room-green: #10b981;
+    --room-green-hover: #059669;
+    
+    --room-red: #ef4444;
+    --room-red-hover: #dc2626;
+    
+    --room-yellow: #eab308;
+    --room-yellow-hover: #ca8a04;
+
+    --room-blue: #3b82f6;
+    --room-blue-hover: #2563eb;
+
+    /* Variáveis Dinâmicas de Tema (Modificadas via JS) */
+    --dynamic-primary: var(--primary-color);
+    --dynamic-hover: var(--primary-hover);
+
+    --bg-dark: #003366; /* Azul Escuro */
+    --bg-card: rgba(255, 255, 255, 0.95); /* Cartão branco translúcido */
+    --text-main: #ffffff; /* Texto branco principal */
+    --text-card: #003366; /* Texto azul escuro nos cards */
+    --text-muted: #4a5568;
+    --error-color: #ef4444;
+    --success-color: #10b981;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #001f3f; /* Fundo base bem escuro */
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(242, 101, 34, 0.4) 0%, transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(242, 101, 34, 0.25) 0%, transparent 55%),
+        radial-gradient(circle at 50% 50%, #003366 0%, #001a33 100%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body.auth-bg {
+    /* O 50% ajusta a posição horizontal da imagem. Se a divisão estiver torta, você pode mudar para 49% ou 51% para alinhar perfeitamente */
+    background: linear-gradient(rgba(0, 51, 102, 0.4), rgba(0, 51, 102, 0.7)), url('bg-split.jpg') no-repeat;
+    background-position: 50% center; 
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+body.madeira-theme {
+    --primary-color: #8bc34a; /* verde folha */
+    --primary-hover: #7cb342;
+    --primary-glow: rgba(139, 195, 74, 0.15);
+    --dynamic-primary: #8bc34a;
+    --dynamic-hover: #7cb342;
+    
+    background-color: #001f3f; /* Fundo base azul escuro */
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(139, 195, 74, 0.25) 0%, transparent 45%),   /* verde claro */
+        radial-gradient(circle at 100% 100%, rgba(0, 153, 204, 0.25) 0%, transparent 55%), /* azul claro */
+        radial-gradient(circle at 50% 50%, #003366 0%, #001a33 100%);
+    background-attachment: fixed;
+}
+
+#app {
+    width: 100%;
+    max-width: 1400px;
+    padding: 20px;
+    position: relative;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TELA DE SELEÇÃO DE UNIDADE (select.html) --- */
+.select-body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+.select-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.select-side {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease;
+}
+
+.select-tintas {
+    /* Pega apenas a metade esquerda da imagem */
+    background-image: url('bg-split.jpg');
+    background-size: 200% 100%;
+    background-position: 0% center;
+}
+
+.select-madeira {
+    /* Pega apenas a metade direita da imagem */
+    background-image: url('bg-split.jpg');
+    background-size: 200% 100%;
+    background-position: 100% center;
+}
+
+.select-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.5); /* Clarifica a imagem de fundo */
+    transition: background 0.3s ease;
+    z-index: 1;
+}
+
+.select-side:hover .select-overlay {
+    background: rgba(255, 255, 255, 0.1); /* Deixa a imagem nítida no hover */
+}
+
+.select-logo {
+    position: relative;
+    z-index: 2;
+    width: 280px;
+    height: auto;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    transition: transform 0.3s ease;
+}
+
+.select-side:hover .select-logo {
+    transform: scale(1.05); /* Logo cresce sutilmente */
+}
+
+.select-title {
+    position: relative;
+    z-index: 2;
+    margin-top: 30px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    background: rgba(255,255,255,0.9);
+    padding: 12px 25px;
+    border-radius: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.select-side:hover .select-title {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Telas normais */
+.screen {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 51, 102, 0.1);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: var(--text-card); /* Texto escuro no card claro */
+}
+
+/* Login e Registro */
+#login-section, #register-section, #forgot-password-section, #update-password-section {
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-card h2 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+}
+
+.login-card p {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+}
+
+/* Unit Selection */
+#unit-section {
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.unit-split {
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.unit-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 30px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.unit-btn h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.unit-btn p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.unit-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.unit-divider {
+    width: 2px;
+    background: rgba(0, 51, 102, 0.1);
+}
+
+/* Inputs */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 51, 102, 0.2);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--text-card);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Foca no input com a cor dinâmica (padrão é indigo) */
+.input-group input:focus, .input-group select:focus {
+    outline: none;
+    border-color: var(--dynamic-primary);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Quando input for do tipo time e tiver o seletor em alguns browsers */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+.input-group input:disabled, .input-group select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Botões base */
+.btn-primary, .btn-danger {
+    width: 100%;
+    padding: 14px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+.btn-primary { background: var(--primary-color); }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:active, .btn-danger:active { transform: scale(0.98); }
+
+.btn-danger { background: var(--error-color); }
+.btn-danger:hover { background: #b91c1c; }
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.btn-text:hover { color: var(--primary-hover); text-decoration: underline; }
+
+#logout-btn, #logout-btn-calendar { color: var(--text-muted); }
+#logout-btn:hover, #logout-btn-calendar:hover { color: var(--error-color); text-decoration: none; }
+
+.back-select-btn { color: var(--text-muted); }
+.back-select-btn:hover { color: var(--primary-hover); text-decoration: underline; }
+
+/* Dashboard */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, var(--primary-color), rgba(0, 51, 102, 0.1)) 1;
+    position: relative;
+}
+
+.dashboard-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 50px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+.app-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ffffff, var(--primary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.user-info { display: flex; align-items: center; gap: 15px; }
+.user-info span { font-weight: 600; color: var(--primary-color); }
+
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.room-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(0, 51, 102, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: var(--text-card);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.room-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), #003366);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 51, 102, 0.2), 0 0 20px var(--primary-glow);
+    border-color: var(--primary-color);
+}
+
+.room-card:hover::before {
+    opacity: 1;
+}
+
+/* Estilos Específicos por Sala no Dashboard */
+.room-green .room-icon { color: var(--room-green); background: rgba(16, 185, 129, 0.1); }
+.room-red .room-icon { color: var(--room-red); background: rgba(239, 68, 68, 0.1); }
+.room-yellow .room-icon { color: var(--room-yellow); background: rgba(234, 179, 8, 0.1); }
+.room-blue .room-icon { color: var(--room-blue); background: rgba(59, 130, 246, 0.1); }
+
+.room-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 15px;
+}
+.room-card h3 { margin-bottom: 8px; }
+.room-card p { color: var(--text-muted); font-size: 0.9rem; }
+
+/* --- Calendário Visual Expandido --- */
+.calendar-container {
+    max-width: 1200px; /* Maior para acomodar os textos */
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-icon {
+    background: rgba(0, 51, 102, 0.05);
+    border: none;
+    color: var(--text-card);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background 0.3s;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px; /* Mais espaço */
+}
+
+.weekday {
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.days-grid {
+    display: contents; 
+}
+
+.calendar-day {
+    min-height: 120px; /* Altura mínima muito maior para caber agendamentos */
+    background: rgba(0, 51, 102, 0.02);
+    border: 1px solid rgba(0, 51, 102, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch; /* Estica os itens (chips) ocupando a largura */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    overflow-y: auto; /* Scroll interno se tiver muitas reuniões */
+    color: var(--text-card);
+}
+
+/* Scrollbar invisível no dia do calendário para ficar limpo */
+.calendar-day::-webkit-scrollbar { width: 4px; }
+.calendar-day::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 2px; }
+
+.calendar-day.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.calendar-day:not(.empty):not(.disabled):hover {
+    background: rgba(0, 51, 102, 0.05);
+    border-color: var(--dynamic-primary);
+}
+
+.calendar-day.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.calendar-day.today {
+    border: 1px solid var(--dynamic-primary);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.day-number {
+    font-weight: bold;
+    margin-bottom: 8px;
+    align-self: flex-start;
+}
+.calendar-day.today .day-number {
+    color: var(--dynamic-primary);
+}
+
+/* Etiqueta de Evento no Calendário */
+.event-chip {
+    background: var(--dynamic-primary);
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+}
+
+/* Classes Utilitárias Dinâmicas (Coloração Dinâmica) */
+.dynamic-bg { background: var(--dynamic-primary) !important; }
+.dynamic-bg:hover { background: var(--dynamic-hover) !important; }
+
+.dynamic-bg-hover:hover { background: var(--dynamic-primary) !important; }
+
+.dynamic-text { color: var(--dynamic-primary) !important; }
+.dynamic-text-hover:hover { color: var(--dynamic-primary) !important; }
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-overlay.hidden { display: none; }
+.modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    animation: slideUp 0.4s ease-out;
+}
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.close-btn:hover { color: var(--primary-color); }
+
+/* Utils */
+.mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
+.error-msg {
+    color: var(--error-color);
+    font-size: 0.85rem;
+    margin-top: 10px;
+    min-height: 20px;
+}
+
+/* --- RESPONSIVIDADE (Mobile) --- */
+@media (max-width: 768px) {
+    #app {
+        padding: 10px;
+    }
+
+    .glass-card {
+        padding: 20px;
+    }
+
+    .app-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+
+    .app-header h1 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .dashboard-logo {
+        position: static;
+        transform: none;
+    }
+
+    .user-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Calendário: Scroll horizontal para evitar esmagamento em telas muito pequenas */
+    .calendar-container {
+        padding: 10px;
+        overflow-x: auto;
+    }
+
+    .calendar-grid {
+        min-width: 700px; /* Garante que os dias não sejam esmagados horizontalmente */
+        gap: 5px;
+    }
+
+    .calendar-day {
+        min-height: 100px;
+        padding: 5px;
+        font-size: 0.8rem;
+    }
+
+    .event-chip {
+        font-size: 0.7rem;
+        padding: 3px 4px;
+    }
+
+    /* Modais */
+    .modal-content {
+        padding: 25px 20px;
+        width: calc(100% - 30px);
+        margin: 15px auto;
+    }
+
+    /* Ajustar inputs que estão lado a lado no HTML (Start e End time) */
+    .input-group[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .rooms-grid {
+        gap: 15px;
+    }
+
+    .room-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .glass-card h2 {
+        font-size: 1.5rem;
+    }
+    
+    .btn-primary, .btn-danger {
+        padding: 12px;
+    }
+}

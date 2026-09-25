@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agendamento de Salas</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-bg">
+    <div id="app">
+        <!-- Tela de Login -->
+        <section id="login-section" class="screen active">
+            <div class="glass-card login-card">
+                <h2>Bem-vindo</h2>
+                <p>Faça login para continuar</p>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="login-email">E-mail corporativo</label>
+                        <input type="email" id="login-email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                        <div style="text-align: right; margin-top: 5px;">
+                            <button type="button" id="forgot-password-link" class="btn-text" style="font-size: 0.8rem; font-weight: 400;">Esqueceu a senha?</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Entrar</button>
+                    <p id="login-error" class="error-msg"></p>
+
+                    <div class="mt-4">
+                        <span style="color: var(--text-muted); font-size: 0.9rem;">Não tem uma conta?</span>
+                        <button type="button" id="go-to-register-btn" class="btn-text">Criar Conta</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Tela de Registro -->
+        <section id="register-section" class="screen">
+            <div class="glass-card login-card">
+                <h2>Criar Conta</h2>
+                <p>Preencha os dados para criar sua conta</p>
+                <form id="register-form">
+                    <div class="input-group">
+                        <label for="reg-name">Nome Completo</label>
+                        <input type="text" id="reg-name" placeholder="Digite seu nome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email">E-mail corporativo</label>
+                        <input type="email" id="reg-email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password">Senha</label>
+                        <input type="password" id="reg-password" placeholder="Crie uma senha" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Cadastrar</button>
+                    <p id="register-error" class="error-msg"></p>
+
+                    <div class="mt-4">
+                        <button type="button" id="back-to-login-btn" class="btn-text">&larr; Voltar para Login</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Tela de Recuperação de Senha -->
+        <section id="forgot-password-section" class="screen">
+            <div class="glass-card login-card">
+                <h2>Recuperar Senha</h2>
+                <p>Digite seu e-mail para receber as instruções</p>
+                <form id="forgot-password-form">
+                    <div class="input-group">
+                        <label for="forgot-email">E-mail corporativo</label>
+                        <input type="email" id="forgot-email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Enviar Email</button>
+                    <p id="forgot-error" class="error-msg"></p>
+                    <p id="forgot-success" style="color: var(--success-color); font-size: 0.85rem; margin-top: 10px; min-height: 20px;"></p>
+
+                    <div class="mt-4">
+                        <button type="button" id="back-to-login-from-forgot-btn" class="btn-text">&larr; Voltar para Login</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+
+
+    </div>
+
+    <!-- Supabase JS Client SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+</body>
+
+</html>
