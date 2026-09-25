@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('forgot-email').value.trim();
 
         const options = {
-            redirectTo: 'https://agendasala.netlify.app/reset-password.html'
+            redirectTo: window.location.origin + '/reset-password.html'
         };
 
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, options);
