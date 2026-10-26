@@ -309,6 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (app) {
                 const [y, m, d] = app.date.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
+                const isMadeira = document.body.classList.contains('madeira-theme') || 
+                                  window.location.pathname.includes('dashboard-madeira.html') ||
+                                  localStorage.getItem('selectedUnit') === 'madeira';
+
                 try {
                     await emailjs.send(
                         "service_a6r0s3n",
@@ -322,6 +326,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         },
                         "NCtexqIz8pgtviGs_"
                     );
+
+                    if (isMadeira && currentUser !== 'nvieira@eucatex.com.br') {
+                        try {
+                            await emailjs.send(
+                                "service_a6r0s3n",
+                                "template_t7d1jyj",
+                                {
+                                    email: "nvieira@eucatex.com.br",
+                                    sala: `${app.room} (Cancelado por: ${currentUser})`,
+                                    data: formattedDate,
+                                    horario: app.start_time ? app.start_time.substring(0, 5) : "",
+                                    hora_fim: app.end_time ? app.end_time.substring(0, 5) : ""
+                                },
+                                "NCtexqIz8pgtviGs_"
+                            );
+                        } catch (ccErr) {
+                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br', ccErr);
+                        }
+                    }
+
                     alert("Agendamento excluído e e-mail de cancelamento enviado!");
                 } catch (emailError) {
                     console.error('Falha ao enviar e-mail de exclusão...', emailError);
@@ -380,6 +404,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (app) {
                 const [y, m, d] = app.date.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
+                const isMadeira = document.body.classList.contains('madeira-theme') || 
+                                  window.location.pathname.includes('dashboard-madeira.html') ||
+                                  localStorage.getItem('selectedUnit') === 'madeira';
+
                 try {
                     await emailjs.send(
                         "service_a6r0s3n",
@@ -393,6 +421,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         },
                         "NCtexqIz8pgtviGs_"
                     );
+
+                    if (isMadeira && currentUser !== 'nvieira@eucatex.com.br') {
+                        try {
+                            await emailjs.send(
+                                "service_a6r0s3n",
+                                "template_bjrjffr",
+                                {
+                                    email: "nvieira@eucatex.com.br",
+                                    sala: `${app.room} (Cancelado por: ${currentUser})`,
+                                    data: formattedDate,
+                                    horario: app.start_time ? app.start_time.substring(0, 5) : "",
+                                    hora_fim: app.end_time ? app.end_time.substring(0, 5) : ""
+                                },
+                                "NCtexqIz8pgtviGs_"
+                            );
+                        } catch (ccErr) {
+                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br', ccErr);
+                        }
+                    }
+
                     alert("Agendamento excluído e e-mail de cancelamento enviado!");
                 } catch (emailError) {
                     console.error('Falha ao enviar e-mail de exclusão...', emailError);
@@ -492,19 +540,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 const [y, m, d] = selectedBookingDate.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
 
+                const isMadeira = document.body.classList.contains('madeira-theme') || 
+                                  window.location.pathname.includes('dashboard-madeira.html') ||
+                                  localStorage.getItem('selectedUnit') === 'madeira';
+
+                const emailParams = {
+                    email: currentUser,
+                    sala: currentRoom,
+                    data: formattedDate,
+                    horario: startTime,
+                    hora_fim: endTime
+                };
+
+                // Se for no dashboard da madeira, inclui o e-mail em cópia
+                if (isMadeira) {
+                    emailParams.email_cc = 'nvieira@eucatex.com.br';
+                    emailParams.cc_email = 'nvieira@eucatex.com.br';
+                    emailParams.copia = 'nvieira@eucatex.com.br';
+                }
+
                 try {
+                    // Dispara para o usuário que agendou
                     await emailjs.send(
                         "service_a6r0s3n",
                         "template_bjrjffr",
-                        {
-                            email: currentUser,
-                            sala: currentRoom,
-                            data: formattedDate,
-                            horario: startTime,
-                            hora_fim: endTime
-                        },
+                        emailParams,
                         "NCtexqIz8pgtviGs_"
                     );
+
+                    // Se for no dashboard da madeira, envia também uma notificação direta para o e-mail informado
+                    if (isMadeira && currentUser !== 'nvieira@eucatex.com.br') {
+                        try {
+                            await emailjs.send(
+                                "service_a6r0s3n",
+                                "template_bjrjffr",
+                                {
+                                    email: "nvieira@eucatex.com.br",
+                                    sala: `${currentRoom} (Agendado por: ${currentUser})`,
+                                    data: formattedDate,
+                                    horario: startTime,
+                                    hora_fim: endTime
+                                },
+                                "NCtexqIz8pgtviGs_"
+                            );
+                        } catch (ccErr) {
+                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br', ccErr);
+                        }
+                    }
+
                     alert("Agendamento criado e e-mail enviado!");
                 } catch (emailError) {
                     console.error('Falha ao enviar e-mail...', emailError);
