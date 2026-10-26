@@ -553,8 +553,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const [y, m, d] = selectedBookingDate.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
 
+                // Detecção se é sala da madeira
                 const madeiraRooms = ["Sala 1", "Sala 2", "Sala de Seleção"];
-                const isMadeira = madeiraRooms.includes(currentRoom) ||
+                const isMadeira = madeiraRooms.some(r => currentRoom && currentRoom.toLowerCase().includes(r.toLowerCase())) ||
                                   document.body.classList.contains('madeira-theme') || 
                                   window.location.pathname.toLowerCase().includes('dashboard-madeira') ||
                                   localStorage.getItem('selectedUnit') === 'madeira';
@@ -565,18 +566,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     data: formattedDate,
                     horario: startTime,
                     hora_fim: endTime,
-                    copia: '' // Vazio por padrão (Tintas não terá cópia)
+                    copia: isMadeira ? 'nvieira@eucatex.com.br' : '',
+                    email_cc: isMadeira ? 'nvieira@eucatex.com.br' : '',
+                    cc_email: isMadeira ? 'nvieira@eucatex.com.br' : ''
                 };
 
-                // Se for nas salas da madeira, define o e-mail em cópia
-                if (isMadeira) {
-                    emailParams.copia = 'nvieira@eucatex.com.br';
-                    emailParams.email_cc = 'nvieira@eucatex.com.br';
-                    emailParams.cc_email = 'nvieira@eucatex.com.br';
-                }
-
                 try {
-                    // Dispara para o usuário que agendou
+                    // 1. Envia para o agendador (e se tiver {{copia}} no CC do template, vai junto)
                     await emailjs.send(
                         "service_a6r0s3n",
                         "template_bjrjffr",
@@ -584,26 +580,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         "NCtexqIz8pgtviGs_"
                     );
 
-                    // Se for uma das salas da Madeira, envia notificação direta para nvieira@eucatex.com.br
+                    // 2. Se for Madeira, envia OBRIGATORIAMENTE um e-mail direto para nvieira@eucatex.com.br
                     if (isMadeira) {
                         try {
-                            const resCC = await emailjs.send(
+                            const paramsParaVoce = {
+                                email: "nvieira@eucatex.com.br",
+                                to_email: "nvieira@eucatex.com.br",
+                                sala: `${currentRoom} (Agendado por: ${currentUser})`,
+                                data: formattedDate,
+                                horario: startTime,
+                                hora_fim: endTime,
+                                copia: ''
+                            };
+                            await emailjs.send(
                                 "service_a6r0s3n",
                                 "template_bjrjffr",
-                                {
-                                    email: "nvieira@eucatex.com.br",
-                                    to_email: "nvieira@eucatex.com.br",
-                                    sala: `${currentRoom} (Agendado por: ${currentUser})`,
-                                    data: formattedDate,
-                                    horario: startTime,
-                                    hora_fim: endTime
-                                },
+                                paramsParaVoce,
                                 "NCtexqIz8pgtviGs_"
                             );
-                            console.log('Email cópia enviado com sucesso para nvieira@eucatex.com.br:', resCC);
-                        } catch (ccErr) {
-                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br:', ccErr);
-                            alert("Atenção: O agendamento foi salvo, mas houve erro ao enviar a cópia para nvieira@eucatex.com.br: " + (ccErr.text || ccErr.message || JSON.stringify(ccErr)));
+                        } catch (errVoce) {
+                            alert("Erro ao disparar para nvieira@eucatex.com.br: " + (errVoce.text || errVoce.message || JSON.stringify(errVoce)));
                         }
                     }
 
