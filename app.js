@@ -315,17 +315,24 @@ document.addEventListener('DOMContentLoaded', () => {
                                   window.location.pathname.toLowerCase().includes('dashboard-madeira') ||
                                   localStorage.getItem('selectedUnit') === 'madeira';
 
+                const cancelParams = {
+                    email: currentUser,
+                    sala: app.room,
+                    data: formattedDate,
+                    horario: app.start_time ? app.start_time.substring(0, 5) : "",
+                    hora_fim: app.end_time ? app.end_time.substring(0, 5) : "",
+                    copia: '' // Vazio por padrão
+                };
+
+                if (isMadeira) {
+                    cancelParams.copia = 'nvieira@eucatex.com.br';
+                }
+
                 try {
                     await emailjs.send(
                         "service_a6r0s3n",
                         "template_t7d1jyj",
-                        {
-                            email: currentUser,
-                            sala: app.room,
-                            data: formattedDate,
-                            horario: app.start_time ? app.start_time.substring(0, 5) : "",
-                            hora_fim: app.end_time ? app.end_time.substring(0, 5) : ""
-                        },
+                        cancelParams,
                         "NCtexqIz8pgtviGs_"
                     );
 
@@ -557,14 +564,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     sala: currentRoom,
                     data: formattedDate,
                     horario: startTime,
-                    hora_fim: endTime
+                    hora_fim: endTime,
+                    copia: '' // Vazio por padrão (Tintas não terá cópia)
                 };
 
-                // Se for nas salas da madeira, inclui campos de cópia no template
+                // Se for nas salas da madeira, define o e-mail em cópia
                 if (isMadeira) {
+                    emailParams.copia = 'nvieira@eucatex.com.br';
                     emailParams.email_cc = 'nvieira@eucatex.com.br';
                     emailParams.cc_email = 'nvieira@eucatex.com.br';
-                    emailParams.copia = 'nvieira@eucatex.com.br';
                 }
 
                 try {
@@ -576,10 +584,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         "NCtexqIz8pgtviGs_"
                     );
 
-                    // Se for uma das salas da Madeira, garante o envio do e-mail para você
+                    // Se for uma das salas da Madeira, envia notificação direta para nvieira@eucatex.com.br
                     if (isMadeira) {
                         try {
-                            await emailjs.send(
+                            const resCC = await emailjs.send(
                                 "service_a6r0s3n",
                                 "template_bjrjffr",
                                 {
@@ -592,15 +600,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                 },
                                 "NCtexqIz8pgtviGs_"
                             );
+                            console.log('Email cópia enviado com sucesso para nvieira@eucatex.com.br:', resCC);
                         } catch (ccErr) {
-                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br', ccErr);
+                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br:', ccErr);
+                            alert("Atenção: O agendamento foi salvo, mas houve erro ao enviar a cópia para nvieira@eucatex.com.br: " + (ccErr.text || ccErr.message || JSON.stringify(ccErr)));
                         }
                     }
 
                     alert("Agendamento criado e e-mail enviado!");
                 } catch (emailError) {
                     console.error('Falha ao enviar e-mail...', emailError);
-                    alert("Agendamento criado, mas houve uma falha ao disparar o e-mail.");
+                    alert("Agendamento criado, mas houve uma falha ao disparar o e-mail: " + (emailError.text || emailError.message || JSON.stringify(emailError)));
                 }
             }
         }
