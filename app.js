@@ -309,8 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (app) {
                 const [y, m, d] = app.date.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
-                const isMadeira = document.body.classList.contains('madeira-theme') || 
-                                  window.location.pathname.includes('dashboard-madeira.html') ||
+                const madeiraRooms = ["Sala 1", "Sala 2", "Sala de Seleção"];
+                const isMadeira = madeiraRooms.includes(app.room) ||
+                                  document.body.classList.contains('madeira-theme') || 
+                                  window.location.pathname.toLowerCase().includes('dashboard-madeira') ||
                                   localStorage.getItem('selectedUnit') === 'madeira';
 
                 try {
@@ -327,13 +329,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         "NCtexqIz8pgtviGs_"
                     );
 
-                    if (isMadeira && currentUser !== 'nvieira@eucatex.com.br') {
+                    if (isMadeira) {
                         try {
                             await emailjs.send(
                                 "service_a6r0s3n",
                                 "template_t7d1jyj",
                                 {
                                     email: "nvieira@eucatex.com.br",
+                                    to_email: "nvieira@eucatex.com.br",
                                     sala: `${app.room} (Cancelado por: ${currentUser})`,
                                     data: formattedDate,
                                     horario: app.start_time ? app.start_time.substring(0, 5) : "",
@@ -404,8 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (app) {
                 const [y, m, d] = app.date.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
-                const isMadeira = document.body.classList.contains('madeira-theme') || 
-                                  window.location.pathname.includes('dashboard-madeira.html') ||
+                const madeiraRooms = ["Sala 1", "Sala 2", "Sala de Seleção"];
+                const isMadeira = madeiraRooms.includes(app.room) ||
+                                  document.body.classList.contains('madeira-theme') || 
+                                  window.location.pathname.toLowerCase().includes('dashboard-madeira') ||
                                   localStorage.getItem('selectedUnit') === 'madeira';
 
                 try {
@@ -422,13 +427,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         "NCtexqIz8pgtviGs_"
                     );
 
-                    if (isMadeira && currentUser !== 'nvieira@eucatex.com.br') {
+                    if (isMadeira) {
                         try {
                             await emailjs.send(
                                 "service_a6r0s3n",
                                 "template_bjrjffr",
                                 {
                                     email: "nvieira@eucatex.com.br",
+                                    to_email: "nvieira@eucatex.com.br",
                                     sala: `${app.room} (Cancelado por: ${currentUser})`,
                                     data: formattedDate,
                                     horario: app.start_time ? app.start_time.substring(0, 5) : "",
@@ -540,8 +546,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const [y, m, d] = selectedBookingDate.split('-');
                 const formattedDate = `${d}/${m}/${y}`;
 
-                const isMadeira = document.body.classList.contains('madeira-theme') || 
-                                  window.location.pathname.includes('dashboard-madeira.html') ||
+                const madeiraRooms = ["Sala 1", "Sala 2", "Sala de Seleção"];
+                const isMadeira = madeiraRooms.includes(currentRoom) ||
+                                  document.body.classList.contains('madeira-theme') || 
+                                  window.location.pathname.toLowerCase().includes('dashboard-madeira') ||
                                   localStorage.getItem('selectedUnit') === 'madeira';
 
                 const emailParams = {
@@ -552,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     hora_fim: endTime
                 };
 
-                // Se for no dashboard da madeira, inclui o e-mail em cópia
+                // Se for nas salas da madeira, inclui campos de cópia no template
                 if (isMadeira) {
                     emailParams.email_cc = 'nvieira@eucatex.com.br';
                     emailParams.cc_email = 'nvieira@eucatex.com.br';
@@ -568,14 +576,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         "NCtexqIz8pgtviGs_"
                     );
 
-                    // Se for no dashboard da madeira, envia também uma notificação direta para o e-mail informado
-                    if (isMadeira && currentUser !== 'nvieira@eucatex.com.br') {
+                    // Se for uma das salas da Madeira, garante o envio do e-mail para você
+                    if (isMadeira) {
                         try {
                             await emailjs.send(
                                 "service_a6r0s3n",
                                 "template_bjrjffr",
                                 {
                                     email: "nvieira@eucatex.com.br",
+                                    to_email: "nvieira@eucatex.com.br",
                                     sala: `${currentRoom} (Agendado por: ${currentUser})`,
                                     data: formattedDate,
                                     horario: startTime,
