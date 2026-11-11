@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 if (isMadeira) {
-                    cancelParams.copia = 'nvieira@eucatex.com.br';
+                    cancelParams.copia = 'ldelatorre@eucatex.com.br';
                 }
 
                 try {
@@ -342,8 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 "service_a6r0s3n",
                                 "template_t7d1jyj",
                                 {
-                                    email: "nvieira@eucatex.com.br",
-                                    to_email: "nvieira@eucatex.com.br",
+                                    email: "ldelatorre@eucatex.com.br",
+                                    to_email: "ldelatorre@eucatex.com.br",
                                     sala: `${app.room} (Cancelado por: ${currentUser})`,
                                     data: formattedDate,
                                     horario: app.start_time ? app.start_time.substring(0, 5) : "",
@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 "NCtexqIz8pgtviGs_"
                             );
                         } catch (ccErr) {
-                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br', ccErr);
+                            console.error('Falha ao enviar e-mail em cópia para ldelatorre@eucatex.com.br', ccErr);
                         }
                     }
 
@@ -440,8 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 "service_a6r0s3n",
                                 "template_bjrjffr",
                                 {
-                                    email: "nvieira@eucatex.com.br",
-                                    to_email: "nvieira@eucatex.com.br",
+                                    email: "ldelatorre@eucatex.com.br",
+                                    to_email: "ldelatorre@eucatex.com.br",
                                     sala: `${app.room} (Cancelado por: ${currentUser})`,
                                     data: formattedDate,
                                     horario: app.start_time ? app.start_time.substring(0, 5) : "",
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 "NCtexqIz8pgtviGs_"
                             );
                         } catch (ccErr) {
-                            console.error('Falha ao enviar e-mail em cópia para nvieira@eucatex.com.br', ccErr);
+                            console.error('Falha ao enviar e-mail em cópia para ldelatorre@eucatex.com.br', ccErr);
                         }
                     }
 
@@ -566,9 +566,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     data: formattedDate,
                     horario: startTime,
                     hora_fim: endTime,
-                    copia: isMadeira ? 'nvieira@eucatex.com.br' : '',
-                    email_cc: isMadeira ? 'nvieira@eucatex.com.br' : '',
-                    cc_email: isMadeira ? 'nvieira@eucatex.com.br' : ''
+                    copia: isMadeira ? 'ldelatorre@eucatex.com.br' : '',
+                    email_cc: isMadeira ? 'ldelatorre@eucatex.com.br' : '',
+                    cc_email: isMadeira ? 'ldelatorre@eucatex.com.br' : ''
                 };
 
                 try {
@@ -580,12 +580,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         "NCtexqIz8pgtviGs_"
                     );
 
-                    // 2. Se for Madeira, envia OBRIGATORIAMENTE um e-mail direto para nvieira@eucatex.com.br
+                    // 2. Se for Madeira, envia OBRIGATORIAMENTE um e-mail direto para ldelatorre@eucatex.com.br
                     if (isMadeira) {
                         try {
                             const paramsParaVoce = {
-                                email: "nvieira@eucatex.com.br",
-                                to_email: "nvieira@eucatex.com.br",
+                                email: "ldelatorre@eucatex.com.br",
+                                to_email: "ldelatorre@eucatex.com.br",
                                 sala: `${currentRoom} (Agendado por: ${currentUser})`,
                                 data: formattedDate,
                                 horario: startTime,
@@ -599,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 "NCtexqIz8pgtviGs_"
                             );
                         } catch (errVoce) {
-                            alert("Erro ao disparar para nvieira@eucatex.com.br: " + (errVoce.text || errVoce.message || JSON.stringify(errVoce)));
+                            alert("Erro ao disparar para ldelatorre@eucatex.com.br: " + (errVoce.text || errVoce.message || JSON.stringify(errVoce)));
                         }
                     }
 
